@@ -120,6 +120,12 @@ namespace playfairСipher
                 }
             }
 
+            // удаляет все ф из строки при дешифровании
+            if (mode == Mode.Decrypt)
+            {
+                result = result.Replace("ф", "");
+            }
+
             return result;
         }
 
@@ -134,13 +140,13 @@ namespace playfairСipher
 
                 if (i < trimmed.Length - 1 && message[i] == message[i + 1]) //check if two consecutive letters are the same
                 {
-                    result += 'я';
+                    result += 'ф';
                 }
             }
 
             if (result.Length % 2 != 0)//check if length is even
             {
-                result += 'я';
+                result += 'ф';
             }
 
             return result.ToLower();

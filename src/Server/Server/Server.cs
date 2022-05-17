@@ -40,13 +40,23 @@ namespace Server
 
         private void Log(string msg = "") // clear the log if message is not supplied or is empty
         {
+            string[] tmp = msg.Split(':');
+            string key = tmp[1].Trim();
+
             if (!exit)
             {
                 logTextBox.Invoke((MethodInvoker)delegate
                 {
                     if (msg.Length > 0)
                     {
-                        logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                        if ((key[0] == '0'))
+                        {
+                            textBox1.Text = key.Substring(1);
+                        }
+                        else
+                        {
+                            logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                        }
                     }
                     else
                     {
@@ -128,6 +138,7 @@ namespace Server
         }
 
         public string lastString = "";
+        public string tmp = "";
         private void Read(IAsyncResult result)
         {
             MyClient obj = (MyClient)result.AsyncState;
@@ -146,7 +157,6 @@ namespace Server
             if (bytes > 0)
             {
                 obj.data.AppendFormat("{0}", Encoding.UTF8.GetString(obj.buffer, 0, bytes));
-                lastString = Encoding.UTF8.GetString(obj.buffer, 0, bytes);
 
                 try
                 {
@@ -158,6 +168,16 @@ namespace Server
                     {
                         string msg = string.Format("{0}: {1}", obj.username, obj.data);
                         Log(msg);
+
+                        tmp = Encoding.UTF8.GetString(obj.buffer, 0, bytes);
+
+                        if (tmp[0] != '0')
+                        {
+                            /*string[] subs = tmp.Split(':');
+                            lastString = subs[1];*/
+                            lastString = tmp;
+                        }
+
                         Send(msg, obj.id);
                         obj.data.Clear();
                         obj.handle.Set();
@@ -574,20 +594,20 @@ namespace Server
             label1.Text = actual;*/
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e) // отправить ключ
         {
             if (textBox1.Text.Length > 0)
             {
                 string msg = textBox1.Text;
                 textBox1.Clear();
-                Log(string.Format("{0} (You): Ключ: {1}", usernameTextBox.Text.Trim(), msg));
-                Send(string.Format("{0}: Ключ: {1}", usernameTextBox.Text.Trim(), msg));
+                //Log(string.Format("{0} (You): Ключ: {1}", usernameTextBox.Text.Trim(), msg));
+                Send("0" + msg);
             }
         }
 
         public SecurityAlgorithm _target;
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e) // шифрование
         {
             _target = new PlayFairEng(textBox1.Text);
 
@@ -595,7 +615,7 @@ namespace Server
             sendTextBox.Text = actual;
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e) // дешифрование
         {
             _target = new PlayFairEng(textBox1.Text);
 

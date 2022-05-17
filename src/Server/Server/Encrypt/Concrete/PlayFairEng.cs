@@ -120,6 +120,12 @@ namespace playfairСipher
                 }
             }
 
+            // удаляет все x из строки при дешифровании
+            if (mode == Mode.Decrypt)
+            {
+                result = result.Replace("x", "");
+            }
+
             return result;
         }
 

@@ -42,7 +42,31 @@ namespace Client
                 {
                     if (msg.Length > 0)
                     {
-                        logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                        if (msg.Contains(":")) // сообщение от другого пользователя пользователю
+                        {
+                            string[] tmp = msg.Split(':'); // сплитим на массив строк
+                            string key = tmp[1].Trim(); // выбираем 2 часть, там где ключ
+
+                            if ((key[0] == '0'))
+                            {
+                                textBox1.Text = key.Substring(1);
+                            }
+                            else
+                            {
+                                logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                            }
+                        }
+                        else // иначе если сообщение от сервера
+                        {
+                            if ((msg[0] == '0'))
+                            {
+                                textBox1.Text = msg.Substring(1);
+                            }
+                            else
+                            {
+                                logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                            }
+                        }
                     }
                     else
                     {
@@ -92,6 +116,7 @@ namespace Client
         }
 
         public string lastString = "";
+        public string tmp = "";
 
         private void Read(IAsyncResult result)
         {
@@ -110,11 +135,6 @@ namespace Client
             if (bytes > 0)
             {
                 obj.data.AppendFormat("{0}", Encoding.UTF8.GetString(obj.buffer, 0, bytes));
-                lastString = Encoding.UTF8.GetString(obj.buffer, 0, bytes);
-                string[] subs = lastString.Split(':');
-                lastString = subs[1];
-                lastString = lastString.Trim();
-                //lastString = lastString.Substring(1);
 
                 try
                 {
@@ -125,6 +145,18 @@ namespace Client
                     else
                     {
                         Log(obj.data.ToString());
+
+                        tmp = Encoding.UTF8.GetString(obj.buffer, 0, bytes);
+                        //lastString = lastString.Substring(1);
+
+                        if (tmp.Contains(":"))
+                        {
+                            string[] subs = tmp.Split(':');
+                            lastString = subs[1];
+                            lastString = lastString.Trim();
+                        }
+                        //lastString = lastString.Substring(1);
+
                         obj.data.Clear();
                         obj.handle.Set();
                     }
@@ -414,7 +446,7 @@ namespace Client
 
         public SecurityAlgorithm _target;
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) // дешифрование
         {
             _target = new PlayFairEng(textBox1.Text);
 
@@ -424,12 +456,23 @@ namespace Client
             //label1.Text = actual;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e) // шифрование
         {
             _target = new PlayFairEng(textBox1.Text);
 
             string actual = _target.Encrypt(sendTextBox.Text);
             sendTextBox.Text = actual;
+        }
+
+        private void button3_Click(object sender, EventArgs e) // отправить ключ для алгоритма
+        {
+            if (textBox1.Text.Length > 0)
+            {
+                string msg = textBox1.Text;
+                textBox1.Clear();
+                //Log(string.Format("{0} (You): Ключ: {1}", usernameTextBox.Text.Trim(), msg));
+                Send("0" + msg);
+            }
         }
     }
 }
