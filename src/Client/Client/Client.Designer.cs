@@ -44,11 +44,11 @@
             this.addrTextBox = new System.Windows.Forms.TextBox();
             this.versionLabel = new System.Windows.Forms.Label();
             this.checkBox = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.encryptionKeyTextBox = new System.Windows.Forms.TextBox();
+            this.encryptionKeyLabel = new System.Windows.Forms.Label();
+            this.decryptButton = new System.Windows.Forms.Button();
+            this.encryptButton = new System.Windows.Forms.Button();
+            this.encryptionKeyButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // connectButton
@@ -66,7 +66,7 @@
             // portLabel
             // 
             this.portLabel.AutoSize = true;
-            this.portLabel.Location = new System.Drawing.Point(412, 21);
+            this.portLabel.Location = new System.Drawing.Point(490, 19);
             this.portLabel.Margin = new System.Windows.Forms.Padding(8, 4, 4, 4);
             this.portLabel.Name = "portLabel";
             this.portLabel.Size = new System.Drawing.Size(34, 16);
@@ -76,7 +76,7 @@
             // localaddrLabel
             // 
             this.localaddrLabel.AutoSize = true;
-            this.localaddrLabel.Location = new System.Drawing.Point(213, 18);
+            this.localaddrLabel.Location = new System.Drawing.Point(291, 16);
             this.localaddrLabel.Margin = new System.Windows.Forms.Padding(8, 4, 4, 4);
             this.localaddrLabel.Name = "localaddrLabel";
             this.localaddrLabel.Size = new System.Drawing.Size(61, 16);
@@ -85,7 +85,7 @@
             // 
             // portTextBox
             // 
-            this.portTextBox.Location = new System.Drawing.Point(449, 18);
+            this.portTextBox.Location = new System.Drawing.Point(527, 16);
             this.portTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.portTextBox.MaxLength = 10;
             this.portTextBox.Name = "portTextBox";
@@ -114,7 +114,7 @@
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.ReadOnly = true;
             this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(568, 301);
+            this.logTextBox.Size = new System.Drawing.Size(646, 301);
             this.logTextBox.TabIndex = 30;
             this.logTextBox.TabStop = false;
             // 
@@ -134,14 +134,15 @@
             this.sendTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.sendTextBox.Name = "sendTextBox";
             this.sendTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.sendTextBox.Size = new System.Drawing.Size(568, 22);
+            this.sendTextBox.Size = new System.Drawing.Size(646, 22);
             this.sendTextBox.TabIndex = 32;
             this.sendTextBox.TabStop = false;
+            this.sendTextBox.TextChanged += new System.EventHandler(this.sendTextBox_TextChanged);
             this.sendTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SendTextBox_KeyDown);
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(465, 102);
+            this.clearButton.Location = new System.Drawing.Point(543, 100);
             this.clearButton.Margin = new System.Windows.Forms.Padding(4);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(116, 28);
@@ -154,7 +155,7 @@
             // usernameLabel
             // 
             this.usernameLabel.AutoSize = true;
-            this.usernameLabel.Location = new System.Drawing.Point(203, 49);
+            this.usernameLabel.Location = new System.Drawing.Point(281, 47);
             this.usernameLabel.Margin = new System.Windows.Forms.Padding(8, 4, 4, 4);
             this.usernameLabel.Name = "usernameLabel";
             this.usernameLabel.Size = new System.Drawing.Size(73, 16);
@@ -163,7 +164,7 @@
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.Location = new System.Drawing.Point(269, 46);
+            this.usernameTextBox.Location = new System.Drawing.Point(347, 44);
             this.usernameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.usernameTextBox.MaxLength = 50;
             this.usernameTextBox.Name = "usernameTextBox";
@@ -176,7 +177,7 @@
             // keyLabel
             // 
             this.keyLabel.AutoSize = true;
-            this.keyLabel.Location = new System.Drawing.Point(413, 49);
+            this.keyLabel.Location = new System.Drawing.Point(491, 47);
             this.keyLabel.Margin = new System.Windows.Forms.Padding(8, 4, 4, 4);
             this.keyLabel.Name = "keyLabel";
             this.keyLabel.Size = new System.Drawing.Size(33, 16);
@@ -185,7 +186,7 @@
             // 
             // keyTextBox
             // 
-            this.keyTextBox.Location = new System.Drawing.Point(449, 46);
+            this.keyTextBox.Location = new System.Drawing.Point(527, 44);
             this.keyTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.keyTextBox.MaxLength = 200;
             this.keyTextBox.Name = "keyTextBox";
@@ -196,7 +197,7 @@
             // 
             // addrTextBox
             // 
-            this.addrTextBox.Location = new System.Drawing.Point(268, 18);
+            this.addrTextBox.Location = new System.Drawing.Point(346, 16);
             this.addrTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.addrTextBox.MaxLength = 200;
             this.addrTextBox.Name = "addrTextBox";
@@ -210,7 +211,7 @@
             // versionLabel
             // 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(553, 447);
+            this.versionLabel.Location = new System.Drawing.Point(628, 447);
             this.versionLabel.Margin = new System.Windows.Forms.Padding(8, 4, 4, 4);
             this.versionLabel.Name = "versionLabel";
             this.versionLabel.Size = new System.Drawing.Size(31, 16);
@@ -220,7 +221,7 @@
             // checkBox
             // 
             this.checkBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.checkBox.Location = new System.Drawing.Point(449, 74);
+            this.checkBox.Location = new System.Drawing.Point(527, 72);
             this.checkBox.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox.Name = "checkBox";
             this.checkBox.Size = new System.Drawing.Size(72, 20);
@@ -229,63 +230,65 @@
             this.checkBox.UseVisualStyleBackColor = true;
             this.checkBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
-            // textBox1
+            // encryptionKeyTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(699, 43);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(132, 22);
-            this.textBox1.TabIndex = 48;
-            this.textBox1.Text = "xxxxxxxxxxx";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.encryptionKeyTextBox.Location = new System.Drawing.Point(389, 496);
+            this.encryptionKeyTextBox.Name = "encryptionKeyTextBox";
+            this.encryptionKeyTextBox.Size = new System.Drawing.Size(132, 22);
+            this.encryptionKeyTextBox.TabIndex = 48;
+            this.encryptionKeyTextBox.Text = "xxxxxxxxxxx";
+            this.encryptionKeyTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label2
+            // encryptionKeyLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(595, 43);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 16);
-            this.label2.TabIndex = 47;
-            this.label2.Text = "Encryption key:";
+            this.encryptionKeyLabel.AutoSize = true;
+            this.encryptionKeyLabel.Location = new System.Drawing.Point(289, 500);
+            this.encryptionKeyLabel.Name = "encryptionKeyLabel";
+            this.encryptionKeyLabel.Size = new System.Drawing.Size(98, 16);
+            this.encryptionKeyLabel.TabIndex = 47;
+            this.encryptionKeyLabel.Text = "Encryption key:";
             // 
-            // button1
+            // decryptButton
             // 
-            this.button1.Location = new System.Drawing.Point(699, 135);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 23);
-            this.button1.TabIndex = 49;
-            this.button1.Text = "Расшифровать";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.decryptButton.Enabled = false;
+            this.decryptButton.Location = new System.Drawing.Point(151, 497);
+            this.decryptButton.Name = "decryptButton";
+            this.decryptButton.Size = new System.Drawing.Size(132, 23);
+            this.decryptButton.TabIndex = 49;
+            this.decryptButton.Text = "Decrypt";
+            this.decryptButton.UseVisualStyleBackColor = true;
+            this.decryptButton.Click += new System.EventHandler(this.decryptButton_Click);
             // 
-            // button2
+            // encryptButton
             // 
-            this.button2.Location = new System.Drawing.Point(699, 185);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(132, 23);
-            this.button2.TabIndex = 50;
-            this.button2.Text = "Зашифровать";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.encryptButton.Enabled = false;
+            this.encryptButton.Location = new System.Drawing.Point(13, 497);
+            this.encryptButton.Name = "encryptButton";
+            this.encryptButton.Size = new System.Drawing.Size(132, 23);
+            this.encryptButton.TabIndex = 50;
+            this.encryptButton.Text = "Encrypt";
+            this.encryptButton.UseVisualStyleBackColor = true;
+            this.encryptButton.Click += new System.EventHandler(this.encryptButton_Click);
             // 
-            // button3
+            // encryptionKeyButton
             // 
-            this.button3.Location = new System.Drawing.Point(699, 84);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(132, 23);
-            this.button3.TabIndex = 51;
-            this.button3.Text = "Send key";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.encryptionKeyButton.Location = new System.Drawing.Point(527, 495);
+            this.encryptionKeyButton.Name = "encryptionKeyButton";
+            this.encryptionKeyButton.Size = new System.Drawing.Size(132, 23);
+            this.encryptionKeyButton.TabIndex = 51;
+            this.encryptionKeyButton.Text = "Send key";
+            this.encryptionKeyButton.UseVisualStyleBackColor = true;
+            this.encryptionKeyButton.Click += new System.EventHandler(this.encryptionKeyTextBox_Click);
             // 
             // Client
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(844, 501);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(672, 530);
+            this.Controls.Add(this.encryptionKeyButton);
+            this.Controls.Add(this.encryptButton);
+            this.Controls.Add(this.decryptButton);
+            this.Controls.Add(this.encryptionKeyTextBox);
+            this.Controls.Add(this.encryptionKeyLabel);
             this.Controls.Add(this.checkBox);
             this.Controls.Add(this.versionLabel);
             this.Controls.Add(this.addrTextBox);
@@ -333,11 +336,11 @@
         private System.Windows.Forms.TextBox addrTextBox;
         private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.CheckBox checkBox;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox encryptionKeyTextBox;
+        private System.Windows.Forms.Label encryptionKeyLabel;
+        private System.Windows.Forms.Button decryptButton;
+        private System.Windows.Forms.Button encryptButton;
+        private System.Windows.Forms.Button encryptionKeyButton;
     }
 }
 

@@ -49,22 +49,26 @@ namespace Client
 
                             if ((key[0] == '0'))
                             {
-                                textBox1.Text = key.Substring(1);
+                                encryptionKeyTextBox.Text = key.Substring(1);
                             }
                             else
                             {
-                                logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                                logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), 
+                                    msg, Environment.NewLine));
+
+                                decryptButton.Enabled = true;
                             }
                         }
                         else // иначе если сообщение от сервера
                         {
                             if ((msg[0] == '0'))
                             {
-                                textBox1.Text = msg.Substring(1);
+                                encryptionKeyTextBox.Text = msg.Substring(1);
                             }
                             else
                             {
-                                logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                                logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), 
+                                    msg, Environment.NewLine));
                             }
                         }
                     }
@@ -446,32 +450,43 @@ namespace Client
 
         public SecurityAlgorithm _target;
 
-        private void button1_Click(object sender, EventArgs e) // дешифрование
+        private void decryptButton_Click(object sender, EventArgs e) // дешифрование
         {
-            _target = new PlayFairEng(textBox1.Text);
+            _target = new PlayFairEng(encryptionKeyTextBox.Text);
 
             string actual = _target.Decrypt(lastString);
 
-            Log(string.Format("Расшифровка: {0}", actual));
+            Log(string.Format("Transcript of the message: {0}", actual));
             //label1.Text = actual;
         }
 
-        private void button2_Click(object sender, EventArgs e) // шифрование
+        private void encryptButton_Click(object sender, EventArgs e) // шифрование
         {
-            _target = new PlayFairEng(textBox1.Text);
+            _target = new PlayFairEng(encryptionKeyTextBox.Text);
 
             string actual = _target.Encrypt(sendTextBox.Text);
             sendTextBox.Text = actual;
         }
 
-        private void button3_Click(object sender, EventArgs e) // отправить ключ для алгоритма
+        private void encryptionKeyTextBox_Click(object sender, EventArgs e) // отправить ключ для алгоритма
         {
-            if (textBox1.Text.Length > 0)
+            if (encryptionKeyTextBox.Text.Length > 0)
             {
-                string msg = textBox1.Text;
-                textBox1.Clear();
-                //Log(string.Format("{0} (You): Ключ: {1}", usernameTextBox.Text.Trim(), msg));
+                string msg = encryptionKeyTextBox.Text;
+                encryptionKeyTextBox.Clear();
                 Send("0" + msg);
+            }
+        }
+
+        private void sendTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (sendTextBox.Text.Length == 0)
+            {
+                encryptButton.Enabled = false;
+            }
+            else
+            {
+                encryptButton.Enabled = true;
             }
         }
     }

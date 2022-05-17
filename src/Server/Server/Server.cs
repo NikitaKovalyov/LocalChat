@@ -51,11 +51,17 @@ namespace Server
                     {
                         if ((key[0] == '0'))
                         {
-                            textBox1.Text = key.Substring(1);
+                            encryptionKeyTextBox.Text = key.Substring(1);
                         }
                         else
                         {
-                            logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), msg, Environment.NewLine));
+                            logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), 
+                                msg, Environment.NewLine));
+
+                            /*if (lastString != "")
+                            {
+                                decryptButton.Enabled = true;
+                            }*/
                         }
                     }
                     else
@@ -594,12 +600,12 @@ namespace Server
             label1.Text = actual;*/
         }
 
-        private void button2_Click(object sender, EventArgs e) // отправить ключ
+        private void encryptionKeyButton_Click(object sender, EventArgs e) // отправить ключ
         {
-            if (textBox1.Text.Length > 0)
+            if (encryptionKeyTextBox.Text.Length > 0)
             {
-                string msg = textBox1.Text;
-                textBox1.Clear();
+                string msg = encryptionKeyTextBox.Text;
+                encryptionKeyTextBox.Clear();
                 //Log(string.Format("{0} (You): Ключ: {1}", usernameTextBox.Text.Trim(), msg));
                 Send("0" + msg);
             }
@@ -607,21 +613,62 @@ namespace Server
 
         public SecurityAlgorithm _target;
 
-        private void button3_Click(object sender, EventArgs e) // шифрование
+        private void encryptButton_Click(object sender, EventArgs e) // шифрование
         {
-            _target = new PlayFairEng(textBox1.Text);
+            //if (isRussianAlphabet(sendTextBox.Text))
+            _target = new PlayFairEng(encryptionKeyTextBox.Text);
 
             string actual = _target.Encrypt(sendTextBox.Text);
             sendTextBox.Text = actual;
         }
 
-        private void button4_Click(object sender, EventArgs e) // дешифрование
+        private void decryptButton_Click(object sender, EventArgs e) // дешифрование
         {
-            _target = new PlayFairEng(textBox1.Text);
+            _target = new PlayFairEng(encryptionKeyTextBox.Text);
 
             string actual = _target.Decrypt(lastString);
 
-            Log(string.Format("Расшифровка: {0}", actual));
+            Log(string.Format("Transcript of the message: {0}", actual));
+        }
+
+        private void sendTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (sendTextBox.Text.Length == 0)
+            {
+                encryptButton.Enabled = false;
+            }
+            else
+            {
+                encryptButton.Enabled = true;
+            }
+        }
+
+        public static bool isRussianAlphabet(string myString)
+        {
+            string RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+            string ru = "aбвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+
+            for (int i = 0; i < myString.Length; i++)
+            {
+                if (RU.IndexOf(myString[i]) == -1 && ru.IndexOf(myString[i]) == -1)
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static bool isEnglishAlphabet(string myString)
+        {
+            string ENG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string eng = "abcdefghijklmnopqrstuvwxyz";
+
+            for (int i = 0; i < myString.Length; i++)
+            {
+                if (ENG.IndexOf(myString[i]) == -1 && eng.IndexOf(myString[i]) == -1)
+                    return false;
+            }
+
+            return true;
         }
     }
 }
