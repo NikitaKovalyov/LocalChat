@@ -31,6 +31,7 @@ namespace Server
         private Task send = null;
         private Thread disconnect = null;
         private bool exit = false;
+        public SecurityAlgorithm _target;
 
         public Server()
         {
@@ -55,7 +56,7 @@ namespace Server
                         }
                         else
                         {
-                            logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"), 
+                            logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"),
                                 msg, Environment.NewLine));
 
                             /*if (lastString != "")
@@ -123,7 +124,7 @@ namespace Server
                 });
             }
         }
-
+        
         private void RemoveFromGrid(long id)
         {
             if (!exit)
@@ -464,7 +465,28 @@ namespace Server
             byte[] buffer = Encoding.UTF8.GetBytes(msg);
             foreach (KeyValuePair<long, MyClient> obj in clients)
             {
+                ////////////////////////////////////////////////////////////////////////////////
                 if (id != obj.Value.id && obj.Value.client.Connected)
+                {
+                    try
+                    {
+                        obj.Value.stream.BeginWrite(buffer, 0, buffer.Length, new AsyncCallback(Write), obj.Value);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log(ErrorMsg(ex.Message));
+                    }
+                }
+            }
+        }
+
+        private void BeginWriteKeyEncryption(string msg, long id = -1) // send the message to everyone except the sender or set ID to lesser than zero to send to everyone
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(msg);
+            foreach (KeyValuePair<long, MyClient> obj in clients)
+            {
+                ////////////////////////////////////////////////////////////////////////////////
+                if (id == obj.Value.id && obj.Value.client.Connected)
                 {
                     try
                     {
@@ -546,15 +568,12 @@ namespace Server
             }
         }
 
-
-
         private void DisconnectButton_Click(object sender, EventArgs e)
         {
             Disconnect();
         }
 
-
-
+        /* Закрытие формы. */
         private void Server_FormClosing(object sender, FormClosingEventArgs e)
         {
             exit = true;
@@ -562,12 +581,18 @@ namespace Server
             Disconnect();
         }
 
+        /* Событие прожатия кнопки отправления сообщения или удаления пользователя из чата. */
         private void ClientsDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == clientsDataGridView.Columns["dc"].Index)
             {
                 long.TryParse(clientsDataGridView.Rows[e.RowIndex].Cells["identifier"].Value.ToString(), out long id);
                 Disconnect(id);
+            }
+            if (e.RowIndex >= 0 && e.ColumnIndex == clientsDataGridView.Columns["ek"].Index)
+            {
+                long.TryParse(clientsDataGridView.Rows[e.RowIndex].Cells["identifier"].Value.ToString(), out long id);
+                SendKeyEncryption(id);
             }
         }
 
@@ -576,6 +601,7 @@ namespace Server
             Log();
         }
 
+        /* Если чекбокс прожат, то ключ заменяются на звездочки. */
         private void CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (keyTextBox.PasswordChar == '*')
@@ -588,32 +614,46 @@ namespace Server
             }
         }
 
-        //public SecurityAlgorithm _target;
-
-        private void Server_Load(object sender, EventArgs e)
+        private void encryptionKeyButton_Click(object sender, EventArgs e)
         {
-            /*_target = new PlayFairEng("mykeylong");
-
-            string plain = "saezmbykgbylhtbdlfsb";
-            string actual = _target.Decrypt(plain);
-
-            label1.Text = actual;*/
+            SendKeyEncryption();
         }
 
-        private void encryptionKeyButton_Click(object sender, EventArgs e) // отправить ключ
+        /* Отправка ключа шифрования пользователю или всем, если параметр не указан. */
+        private void SendKeyEncryption(long id = -1)
         {
-            if (encryptionKeyTextBox.Text.Length > 0)
+            string msg = encryptionKeyTextBox.Text;
+            if (msg.Length > 0)
             {
-                string msg = encryptionKeyTextBox.Text;
                 encryptionKeyTextBox.Clear();
-                //Log(string.Format("{0} (You): Ключ: {1}", usernameTextBox.Text.Trim(), msg));
-                Send("0" + msg);
+
+                if (id >= 0) // отправить пользователю с id 
+                {
+                    if (send == null || send.IsCompleted)
+                    {
+                        send = Task.Factory.StartNew(() => BeginWriteKeyEncryption("0" + msg, id));
+                    }
+                    else
+                    {
+                        send.ContinueWith(antecendent => BeginWriteKeyEncryption("0" + msg, id));
+                    }
+                }
+                else // иначе отправить всем пользователям
+                {
+                    if (send == null || send.IsCompleted)
+                    {
+                        send = Task.Factory.StartNew(() => BeginWrite("0" + msg));
+                    }
+                    else
+                    {
+                        send.ContinueWith(antecendent => BeginWrite("0" + msg));
+                    }
+                }
             }
         }
 
-        public SecurityAlgorithm _target;
-
-        private void encryptButton_Click(object sender, EventArgs e) // шифрование
+        /* Шифрование. */
+        private void encryptButton_Click(object sender, EventArgs e)
         {
             //if (isRussianAlphabet(sendTextBox.Text))
             _target = new PlayFairEng(encryptionKeyTextBox.Text);
@@ -622,7 +662,8 @@ namespace Server
             sendTextBox.Text = actual;
         }
 
-        private void decryptButton_Click(object sender, EventArgs e) // дешифрование
+        /* Дешифрование. */
+        private void decryptButton_Click(object sender, EventArgs e)
         {
             _target = new PlayFairEng(encryptionKeyTextBox.Text);
 
@@ -631,6 +672,8 @@ namespace Server
             Log(string.Format("Transcript of the message: {0}", actual));
         }
 
+        /* Функция, проверяющая является ли строка ввода пустой. 
+           Если да, то кнопка задизейблена. */
         private void sendTextBox_TextChanged(object sender, EventArgs e)
         {
             if (sendTextBox.Text.Length == 0)
@@ -643,6 +686,7 @@ namespace Server
             }
         }
 
+        /* Проверяет, содержит ли строка символы только русского алфавита. */
         public static bool isRussianAlphabet(string myString)
         {
             string RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
@@ -657,6 +701,7 @@ namespace Server
             return true;
         }
 
+        /* Проверяет, содержит ли строка символы только английского алфавита. */
         public static bool isEnglishAlphabet(string myString)
         {
             string ENG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

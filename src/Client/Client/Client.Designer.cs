@@ -242,7 +242,7 @@
             // encryptionKeyLabel
             // 
             this.encryptionKeyLabel.AutoSize = true;
-            this.encryptionKeyLabel.Location = new System.Drawing.Point(289, 500);
+            this.encryptionKeyLabel.Location = new System.Drawing.Point(301, 500);
             this.encryptionKeyLabel.Name = "encryptionKeyLabel";
             this.encryptionKeyLabel.Size = new System.Drawing.Size(98, 16);
             this.encryptionKeyLabel.TabIndex = 47;

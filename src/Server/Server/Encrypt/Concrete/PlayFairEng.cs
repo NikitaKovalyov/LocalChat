@@ -42,6 +42,7 @@ namespace playfairСipher
 
         private string Process(string message, Mode mode)
         {
+            
             //Key:Charcater
             //Value:Position
             Dictionary<char, string> characterPositionsInMatrix = new Dictionary<char, string>();
