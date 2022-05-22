@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using playfairСipher;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace Server
 {
@@ -38,8 +39,8 @@ namespace Server
             InitializeComponent();
         }
 
-
-        private void Log(string msg = "") // clear the log if message is not supplied or is empty
+        /* Логирование, если параметр не передается, то лог очищается. */
+        private void Log(string msg = "")
         {
             string[] tmp = msg.Split(':');
             string key = tmp[1].Trim();
@@ -58,11 +59,6 @@ namespace Server
                         {
                             logTextBox.AppendText(string.Format("[ {0} ] {1}{2}", DateTime.Now.ToString("HH:mm"),
                                 msg, Environment.NewLine));
-
-                            /*if (lastString != "")
-                            {
-                                decryptButton.Enabled = true;
-                            }*/
                         }
                     }
                     else
@@ -73,16 +69,19 @@ namespace Server
             }
         }
 
+        /* Возвращает сообщение ошибки. */
         private string ErrorMsg(string msg)
         {
             return string.Format("ERROR: {0}", msg);
         }
 
+        /* Возвращает системное сообщение. */
         private string SystemMsg(string msg)
         {
             return string.Format("SYSTEM: {0}", msg);
         }
 
+        /* Активация кнопок. */
         private void Active(bool status)
         {
             if (!exit)
@@ -112,6 +111,7 @@ namespace Server
             }
         }
 
+        /* Добавление в таблицу. */
         private void AddToGrid(long id, string name)
         {
             if (!exit)
@@ -125,6 +125,7 @@ namespace Server
             }
         }
         
+        /* Удаление из таблицы. */
         private void RemoveFromGrid(long id)
         {
             if (!exit)
@@ -144,6 +145,7 @@ namespace Server
             }
         }
 
+        /* Прослушивание клиентов. */
         public string lastString = "";
         public string tmp = "";
         private void Read(IAsyncResult result)
@@ -204,6 +206,7 @@ namespace Server
             }
         }
 
+        /* Прослушивание авторизации. */
         private void ReadAuth(IAsyncResult result)
         {
             MyClient obj = (MyClient)result.AsyncState;
@@ -259,6 +262,7 @@ namespace Server
             }
         }
 
+        /* Авторизация пользователя. */
         private bool Authorize(MyClient obj)
         {
             bool success = false;
@@ -282,6 +286,7 @@ namespace Server
             return success;
         }
 
+        /* Подключение пользователя. */
         private void Connection(MyClient obj)
         {
             if (Authorize(obj))
@@ -312,6 +317,7 @@ namespace Server
             }
         }
 
+        /* Прослушиватель. */
         private void Listener(IPAddress ip, int port)
         {
             TcpListener listener = null;
@@ -366,6 +372,7 @@ namespace Server
             }
         }
 
+        /* Старт. */
         private void StartButton_Click(object sender, EventArgs e)
         {
             if (active)
@@ -428,6 +435,7 @@ namespace Server
             }
         }
 
+        /* Запись. */
         private void Write(IAsyncResult result)
         {
             MyClient obj = (MyClient)result.AsyncState;
@@ -444,7 +452,8 @@ namespace Server
             }
         }
 
-        private void BeginWrite(string msg, MyClient obj) // send the message to a specific client
+        /* Отправить сообщение определенному клиенту. */
+        private void BeginWrite(string msg, MyClient obj) 
         {
             byte[] buffer = Encoding.UTF8.GetBytes(msg);
             if (obj.client.Connected)
@@ -459,13 +468,13 @@ namespace Server
                 }
             }
         }
-
-        private void BeginWrite(string msg, long id = -1) // send the message to everyone except the sender or set ID to lesser than zero to send to everyone
+        
+        /* Отправление сообщений. */
+        private void BeginWrite(string msg, long id = -1)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(msg);
             foreach (KeyValuePair<long, MyClient> obj in clients)
             {
-                ////////////////////////////////////////////////////////////////////////////////
                 if (id != obj.Value.id && obj.Value.client.Connected)
                 {
                     try
@@ -480,12 +489,12 @@ namespace Server
             }
         }
 
-        private void BeginWriteKeyEncryption(string msg, long id = -1) // send the message to everyone except the sender or set ID to lesser than zero to send to everyone
+        /* Отправление ключа. */
+        private void BeginWriteKeyEncryption(string msg, long id = -1)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(msg);
             foreach (KeyValuePair<long, MyClient> obj in clients)
             {
-                ////////////////////////////////////////////////////////////////////////////////
                 if (id == obj.Value.id && obj.Value.client.Connected)
                 {
                     try
@@ -500,6 +509,7 @@ namespace Server
             }
         }
 
+        /* Отправление сообщений. */
         private void Send(string msg, MyClient obj)
         {
             if (send == null || send.IsCompleted)
@@ -512,6 +522,7 @@ namespace Server
             }
         }
 
+        /* Отправление сообщений. */
         private void Send(string msg, long id = -1)
         {
             if (send == null || send.IsCompleted)
@@ -524,7 +535,8 @@ namespace Server
             }
         }
 
-        private void SendTextBox_KeyDown(object sender, KeyEventArgs e) // отправление сообщения по нажатии клавиши Enter
+        /* По нажатию клавиши Enter происходит отправка сообщения. */
+        private void SendTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -540,6 +552,7 @@ namespace Server
             }
         }
 
+        /* Отключение пользователя или всех, если id не передается. */
         private void Disconnect(long id = -1) // disconnect everyone if ID is not supplied or is lesser than zero
         {
             if (disconnect == null || !disconnect.IsAlive)
@@ -684,6 +697,8 @@ namespace Server
             {
                 encryptButton.Enabled = true;
             }
+
+
         }
 
         /* Проверяет, содержит ли строка символы только русского алфавита. */
@@ -714,6 +729,42 @@ namespace Server
             }
 
             return true;
+        }
+
+        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutForm form = new AboutForm();
+            form.Show();
+        }
+
+        private void sendTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < 'А' || e.KeyChar > 'Я') && (e.KeyChar < 'а' || e.KeyChar > 'я'))
+            {
+
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void оРазработчикахToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutDeveloper developer = new AboutDeveloper();
+            developer.Show();
+        }
+
+        private void отчетToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Word.Application app = new Word.Application();
+            app.Visible = true;
+            app.Documents.Open(@"D:\БНТУ\2курс\лабы\КСИС\coursework\src\записка.docx");
         }
     }
 }

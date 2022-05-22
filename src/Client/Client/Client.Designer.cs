@@ -139,6 +139,7 @@
             this.sendTextBox.TabStop = false;
             this.sendTextBox.TextChanged += new System.EventHandler(this.sendTextBox_TextChanged);
             this.sendTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SendTextBox_KeyDown);
+            this.sendTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.sendTextBox_KeyPress);
             // 
             // clearButton
             // 

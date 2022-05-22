@@ -28,13 +28,15 @@ namespace Client
         private MyClient obj;
         private Task send = null;
         private bool exit = false;
+        public SecurityAlgorithm _target;
 
         public Client()
         {
             InitializeComponent();
         }
 
-        private void Log(string msg = "") // clear the log if message is not supplied or is empty
+        /* Логирование, если параметр не передается, то лог очищается. */
+        private void Log(string msg = "")
         {
             if (!exit)
             {
@@ -80,16 +82,19 @@ namespace Client
             }
         }
 
+        /* Возвращает сообщение ошибки. */
         private string ErrorMsg(string msg)
         {
             return string.Format("ERROR: {0}", msg);
         }
 
+        /* Возвращает системное сообщение. */
         private string SystemMsg(string msg)
         {
             return string.Format("SYSTEM: {0}", msg);
         }
 
+        /* Активация кнопок. */
         private void Connected(bool status)
         {
             if (!exit)
@@ -119,9 +124,9 @@ namespace Client
             }
         }
 
+        /* Прослушивание клиентов. */
         public string lastString = "";
         public string tmp = "";
-
         private void Read(IAsyncResult result)
         {
             int bytes = 0;
@@ -179,6 +184,7 @@ namespace Client
             }
         }
 
+        /* Прослушивание авторизации. */
         private void ReadAuth(IAsyncResult result)
         {
             int bytes = 0;
@@ -228,6 +234,7 @@ namespace Client
             }
         }
 
+        /* Авторизация пользователя. */
         private bool Authorize()
         {
             bool success = false;
@@ -260,6 +267,7 @@ namespace Client
             return success;
         }
 
+        /* Подключение пользователя. */
         private void Connection(IPAddress ip, int port, string username, string key)
         {
             try
@@ -297,6 +305,7 @@ namespace Client
             }
         }
 
+        /* Подключение пользователя. */
         private void ConnectButton_Click(object sender, EventArgs e)
         {
             if (connected)
@@ -360,6 +369,7 @@ namespace Client
             }
         }
 
+        /* Запись. */
         private void Write(IAsyncResult result)
         {
             if (obj.client.Connected)
@@ -375,6 +385,7 @@ namespace Client
             }
         }
 
+        /* Отправить сообщение всем. */
         private void BeginWrite(string msg)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(msg);
@@ -391,6 +402,7 @@ namespace Client
             }
         }
 
+        /* Отправление сообщений. */
         private void Send(string msg)
         {
             if (send == null || send.IsCompleted)
@@ -403,7 +415,8 @@ namespace Client
             }
         }
 
-        private void SendTextBox_KeyDown(object sender, KeyEventArgs e) // отправка сообщения по нажатию Enter
+        /* Отправка сообщения по нажатию Enter */
+        private void SendTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -422,7 +435,8 @@ namespace Client
             }
         }
 
-        private void Client_FormClosing(object sender, FormClosingEventArgs e) // событие закрытие формы
+        /* Событие закрытие формы. */
+        private void Client_FormClosing(object sender, FormClosingEventArgs e)
         {
             exit = true;
             if (connected)
@@ -436,7 +450,8 @@ namespace Client
             Log();
         }
 
-        private void CheckBox_CheckedChanged(object sender, EventArgs e) // блюр пароля
+        /* Если чекбокс прожат, то ключ заменяются на звездочки. */
+        private void CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (keyTextBox.PasswordChar == '*')
             {
@@ -448,8 +463,7 @@ namespace Client
             }
         }
 
-        public SecurityAlgorithm _target;
-
+        /* Дешифрование. */
         private void decryptButton_Click(object sender, EventArgs e) // дешифрование
         {
             _target = new PlayFairEng(encryptionKeyTextBox.Text);
@@ -460,6 +474,7 @@ namespace Client
             //label1.Text = actual;
         }
 
+        /* Шифрование. */
         private void encryptButton_Click(object sender, EventArgs e) // шифрование
         {
             _target = new PlayFairEng(encryptionKeyTextBox.Text);
@@ -468,7 +483,8 @@ namespace Client
             sendTextBox.Text = actual;
         }
 
-        private void encryptionKeyTextBox_Click(object sender, EventArgs e) // отправить ключ для алгоритма
+        /* Отправить ключ шифрования. */
+        private void encryptionKeyTextBox_Click(object sender, EventArgs e)
         {
             if (encryptionKeyTextBox.Text.Length > 0)
             {
@@ -478,6 +494,8 @@ namespace Client
             }
         }
 
+        /* Функция, проверяющая является ли строка ввода пустой. 
+           Если да, то кнопка задизейблена. */
         private void sendTextBox_TextChanged(object sender, EventArgs e)
         {
             if (sendTextBox.Text.Length == 0)
@@ -487,6 +505,19 @@ namespace Client
             else
             {
                 encryptButton.Enabled = true;
+            }
+        }
+
+        /* Нельзя вводить русские буквы. */
+        private void sendTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < 'А' || e.KeyChar > 'Я') && (e.KeyChar < 'а' || e.KeyChar > 'я'))
+            {
+
+            }
+            else
+            {
+                e.Handled = true;
             }
         }
     }
