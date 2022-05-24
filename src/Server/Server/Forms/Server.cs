@@ -43,7 +43,6 @@ namespace Server
         private void Log(string msg = "")
         {
             string[] tmp = msg.Split(':');
-            string key = tmp[1].Trim();
 
             if (!exit)
             {
@@ -51,6 +50,7 @@ namespace Server
                 {
                     if (msg.Length > 0)
                     {
+                        string key = tmp[1].Trim();
                         if ((key[0] == '0'))
                         {
                             encryptionKeyTextBox.Text = key.Substring(1);
