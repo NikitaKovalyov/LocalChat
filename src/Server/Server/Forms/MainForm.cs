@@ -13,7 +13,7 @@ using Word = Microsoft.Office.Interop.Word;
 
 namespace Server
 {
-    public partial class Server : Form
+    public partial class MainForm : Form
     {
         private bool active = false;
         private Thread listener = null;
@@ -34,7 +34,7 @@ namespace Server
         private bool exit = false;
         public SecurityAlgorithm _target;
 
-        public Server()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -316,6 +316,7 @@ namespace Server
                 Send(msg, tmp.id);
             }
         }
+
 
         /* Прослушиватель. */
         private void Listener(IPAddress ip, int port)
@@ -756,7 +757,7 @@ namespace Server
 
         private void оРазработчикахToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutDeveloper developer = new AboutDeveloper();
+            AboutDevelopForm developer = new AboutDevelopForm();
             developer.Show();
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Server
 {
-    partial class AboutDeveloper
+    partial class AboutDevelopForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -27,7 +27,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutDeveloper));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutDevelopForm));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.labelVersion = new System.Windows.Forms.Label();

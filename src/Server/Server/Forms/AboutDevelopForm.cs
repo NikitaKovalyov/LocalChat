@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace Server
 {
-    partial class AboutDeveloper : Form
+    partial class AboutDevelopForm : Form
     {
-        public AboutDeveloper()
+        public AboutDevelopForm()
         {
             InitializeComponent();
         }

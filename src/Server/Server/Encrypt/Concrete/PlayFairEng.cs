@@ -62,7 +62,7 @@ namespace playfairСipher
 
             for (int i = 0; i < message.Length; i += 2)
             {
-                string substring_of_2 = message.Substring(i, 2);//get characters from text by pairs
+                string substring_of_2 = message.Substring(i, 2).ToLower();//get characters from text by pairs
                 //get Row & Column of each character
                 string rc1 = characterPositionsInMatrix[substring_of_2[0]];
                 string rc2 = characterPositionsInMatrix[substring_of_2[1]];

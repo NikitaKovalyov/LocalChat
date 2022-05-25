@@ -1,6 +1,6 @@
 ﻿namespace Server
 {
-    partial class Server
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -455,7 +455,7 @@
             this.оРазработчикахToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(924, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(924, 28);
             this.menuStrip1.TabIndex = 51;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -465,7 +465,7 @@
             this.отчетToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            this.файлToolStripMenuItem.Size = new System.Drawing.Size(59, 26);
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
             this.файлToolStripMenuItem.Text = "Файл";
             // 
             // отчетToolStripMenuItem
@@ -485,14 +485,14 @@
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(118, 26);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
             this.оПрограммеToolStripMenuItem.Text = "О программе";
             this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
             // 
             // оРазработчикахToolStripMenuItem
             // 
             this.оРазработчикахToolStripMenuItem.Name = "оРазработчикахToolStripMenuItem";
-            this.оРазработчикахToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.оРазработчикахToolStripMenuItem.Size = new System.Drawing.Size(135, 24);
             this.оРазработчикахToolStripMenuItem.Text = "О разработчике";
             this.оРазработчикахToolStripMenuItem.Click += new System.EventHandler(this.оРазработчикахToolStripMenuItem_Click);
             // 
