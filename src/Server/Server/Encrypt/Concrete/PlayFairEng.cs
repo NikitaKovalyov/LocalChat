@@ -43,12 +43,12 @@ namespace playfairСipher
         private string Process(string message, Mode mode)
         {
             
-            //Key:Charcater
-            //Value:Position
+            // Ключ:Символ
+            // Значение:Позиция
             Dictionary<char, string> characterPositionsInMatrix = new Dictionary<char, string>();
 
-            //Key:Position
-            //Value:Charcater
+            // Ключ:Символ
+            // Значение:Позиция
             Dictionary<string, char> positionCharacterInMatrix = new Dictionary<string, char>();
 
             FillMatrix(key.Distinct().ToArray(), characterPositionsInMatrix, positionCharacterInMatrix);
@@ -62,22 +62,22 @@ namespace playfairСipher
 
             for (int i = 0; i < message.Length; i += 2)
             {
-                string substring_of_2 = message.Substring(i, 2).ToLower();//get characters from text by pairs
-                //get Row & Column of each character
+                string substring_of_2 = message.Substring(i, 2).ToLower(); // получение символов из текста по парам
+                // получить строку и столбец каждого символа
                 string rc1 = characterPositionsInMatrix[substring_of_2[0]];
                 string rc2 = characterPositionsInMatrix[substring_of_2[1]];
 
-                if (rc1[0] == rc2[0])//Same Row, different Column
+                if (rc1[0] == rc2[0]) // та же колонка, другая строка
                 {
                     int newC1 = 0, newC2 = 0;
 
                     switch (mode)
                     {
-                        case Mode.Encrypt://Increment Columns
+                        case Mode.Encrypt: // шифрование
                             newC1 = (int.Parse(rc1[1].ToString()) + 1) % 5;
                             newC2 = (int.Parse(rc2[1].ToString()) + 1) % 5;
                             break;
-                        case Mode.Decrypt://Decrement Columns
+                        case Mode.Decrypt: // дешифрование
                             newC1 = (int.Parse(rc1[1].ToString()) - 1) % 5;
                             newC2 = (int.Parse(rc2[1].ToString()) - 1) % 5;
                             break;
@@ -90,17 +90,17 @@ namespace playfairСipher
                     result += positionCharacterInMatrix[rc2[0].ToString() + newC2.ToString()];
                 }
 
-                else if (rc1[1] == rc2[1])//Same Column, different Row
+                else if (rc1[1] == rc2[1]) // та же колонка, другая строка
                 {
                     int newR1 = 0, newR2 = 0;
 
                     switch (mode)
                     {
-                        case Mode.Encrypt://Increment Rows
+                        case Mode.Encrypt: // шифрование
                             newR1 = (int.Parse(rc1[0].ToString()) + 1) % 5;
                             newR2 = (int.Parse(rc2[0].ToString()) + 1) % 5;
                             break;
-                        case Mode.Decrypt://Decrement Rows
+                        case Mode.Decrypt: // дешифрование
                             newR1 = (int.Parse(rc1[0].ToString()) - 1) % 5;
                             newR2 = (int.Parse(rc2[0].ToString()) - 1) % 5;
                             break;
@@ -112,10 +112,10 @@ namespace playfairСipher
                     result += positionCharacterInMatrix[newR2.ToString() + rc2[1].ToString()];
                 }
 
-                else//different Row & Column
+                else // разные строки и столбцы
                 {
-                    //1st character:row of 1st + col of 2nd
-                    //2nd character:row of 2nd + col of 1st
+                    // 1-й символ: строка 1-го + столбец 2-го
+                    // 2-ой символ: строка 2-го + столбец 1-го
                     result += positionCharacterInMatrix[rc1[0].ToString() + rc2[1].ToString()];
                     result += positionCharacterInMatrix[rc2[0].ToString() + rc1[1].ToString()];
                 }
@@ -139,13 +139,13 @@ namespace playfairСipher
             {
                 result += trimmed[i];
 
-                if (i < trimmed.Length - 1 && message[i] == message[i + 1]) //check if two consecutive letters are the same
+                if (i < trimmed.Length - 1 && message[i] == message[i + 1]) // проверить, являются ли две последовательные буквы одинаковыми
                 {
                     result += 'x';
                 }
             }
 
-            if (result.Length % 2 != 0)//check if length is even
+            if (result.Length % 2 != 0) // проверить, является ли длина четной
             {
                 result += 'x';
             }
@@ -166,19 +166,19 @@ namespace playfairСipher
                 {
                     if (charPosition < key.Count)
                     {
-                        matrix[i, j] = key[charPosition];//fill matrix with key
+                        matrix[i, j] = key[charPosition]; // заполнить матрицу ключом
                         alphabetPF.Remove(key[charPosition]);
                         charPosition++;
                     }
 
-                    else//key finished...fill with rest of alphabet
+                    else // клавиша закончена... заполните остальной алфавит
                     {
                         matrix[i, j] = alphabetPF[keyPosition];
                         keyPosition++;
                     }
 
                     string position = i.ToString() + j.ToString();
-                    //store character positions in dictionary to avoid searching everytime
+                    // хранить позиции символов в словаре, чтобы не искать их каждый раз
                     characterPositionsInMatrix.Add(matrix[i, j], position);
                     positionCharacterInMatrix.Add(position, matrix[i, j]);
                 }

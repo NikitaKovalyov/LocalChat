@@ -466,12 +466,14 @@ namespace Client
         /* Дешифрование. */
         private void decryptButton_Click(object sender, EventArgs e) // дешифрование
         {
-            _target = new PlayFairEng(encryptionKeyTextBox.Text);
+            if (lastString.Length > 0 && encryptionKeyTextBox.Text.Length > 0)
+            {
+                _target = new PlayFairEng(encryptionKeyTextBox.Text);
 
-            string actual = _target.Decrypt(lastString);
+                string actual = _target.Decrypt(lastString);
 
-            Log(string.Format("Transcript of the message: {0}", actual));
-            //label1.Text = actual;
+                Log(string.Format("Transcript of the message: {0}", actual));
+            }
         }
 
         /* Шифрование. */

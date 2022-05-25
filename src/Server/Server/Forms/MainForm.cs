@@ -18,6 +18,7 @@ namespace Server
         private bool active = false;
         private Thread listener = null;
         private long id = 0;
+
         private struct MyClient
         {
             public long id;
@@ -181,11 +182,7 @@ namespace Server
                         tmp = Encoding.UTF8.GetString(obj.buffer, 0, bytes);
 
                         if (tmp[0] != '0')
-                        {
-                            /*string[] subs = tmp.Split(':');
-                            lastString = subs[1];*/
                             lastString = tmp;
-                        }
 
                         Send(msg, obj.id);
                         obj.data.Clear();
@@ -372,9 +369,8 @@ namespace Server
                 }
             }
         }
-
-        /* Старт. */
-        private void StartButton_Click(object sender, EventArgs e)
+        
+        private void run()
         {
             if (active)
             {
@@ -434,6 +430,12 @@ namespace Server
                     listener.Start();
                 }
             }
+        }
+
+        /* Старт. */
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            run();
         }
 
         /* Запись. */
@@ -679,11 +681,14 @@ namespace Server
         /* Дешифрование. */
         private void decryptButton_Click(object sender, EventArgs e)
         {
-            _target = new PlayFairEng(encryptionKeyTextBox.Text);
+            if (lastString.Length > 0 && encryptionKeyTextBox.Text.Length > 0)
+            {
+                _target = new PlayFairEng(encryptionKeyTextBox.Text);
 
-            string actual = _target.Decrypt(lastString);
+                string actual = _target.Decrypt(lastString);
 
-            Log(string.Format("Transcript of the message: {0}", actual));
+                Log(string.Format("Transcript of the message: {0}", actual));
+            }
         }
 
         /* Функция, проверяющая является ли строка ввода пустой. 
@@ -698,8 +703,6 @@ namespace Server
             {
                 encryptButton.Enabled = true;
             }
-
-
         }
 
         /* Проверяет, содержит ли строка символы только русского алфавита. */

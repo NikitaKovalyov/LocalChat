@@ -32,10 +32,10 @@
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.labelProductName = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
+            this.labelCompanyName = new System.Windows.Forms.Label();
             this.okButton = new System.Windows.Forms.Button();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.labelCompanyName = new System.Windows.Forms.Label();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -108,6 +108,18 @@
             this.labelVersion.Text = "Playfair cypher(Version 3.0)\r\n";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // labelCompanyName
+            // 
+            this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelCompanyName.Location = new System.Drawing.Point(399, 205);
+            this.labelCompanyName.Margin = new System.Windows.Forms.Padding(8, 0, 4, 0);
+            this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 21);
+            this.labelCompanyName.Name = "labelCompanyName";
+            this.labelCompanyName.Size = new System.Drawing.Size(460, 21);
+            this.labelCompanyName.TabIndex = 22;
+            this.labelCompanyName.Text = "Минск, БНТУ, ФИТР, 2022 год";
+            this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -143,24 +155,11 @@
             this.label6.Text = "Все права защищены.";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // labelCompanyName
-            // 
-            this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(399, 205);
-            this.labelCompanyName.Margin = new System.Windows.Forms.Padding(8, 0, 4, 0);
-            this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 21);
-            this.labelCompanyName.Name = "labelCompanyName";
-            this.labelCompanyName.Size = new System.Drawing.Size(460, 21);
-            this.labelCompanyName.TabIndex = 22;
-            this.labelCompanyName.Text = "Минск, БНТУ, ФИТР, 2022 год";
-            this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // AboutForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(887, 392);
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
