@@ -11,6 +11,7 @@ using playfairСipher;
 
 namespace Client
 {
+    /* This Client */
     public partial class Client : Form
     {
         private bool connected = false;
