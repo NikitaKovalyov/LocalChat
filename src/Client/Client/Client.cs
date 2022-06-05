@@ -11,7 +11,8 @@ using playfairСipher;
 
 namespace Client
 {
-    /* This Client */
+    /* This Client. */
+    
     public partial class Client : Form
     {
         private bool connected = false;
@@ -33,7 +34,7 @@ namespace Client
 
         public Client()
         {
-            InitializeComponent();
+            InitializeComponent(); // инициализация компонентов
         }
 
         /* Логирование, если параметр не передается, то лог очищается. */
