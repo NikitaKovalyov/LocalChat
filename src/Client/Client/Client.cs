@@ -34,7 +34,7 @@ namespace Client
 
         public Client()
         {
-            InitializeComponent(); // инициализация компонентов
+            InitializeComponent(); // инициализация компонентов.
         }
 
         /* Логирование, если параметр не передается, то лог очищается. */
