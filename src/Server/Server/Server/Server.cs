@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Server
 {
-    /* This Servakmь/ */
+    /* This Servak/ */
     public class Server
     {
         private bool active = false;
